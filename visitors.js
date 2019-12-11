@@ -12,6 +12,16 @@ pool.connect(function(err) {
   else console.log("SERVER CONNECTED!");
 });
 
+const createTable = () => {
+    pool.query( 'CREATE TABLE Visitors ( id SERIAL PRIMARY KEY, name VARCHAR(50), age INT, date  DATE, time TIME, assistor VARCHAR(50), comments VARCHAR(100))', (error, respond) => {
+        console.log(error, respond);
+    });
+}
+
+
+//createTable();
+
+
 const addNewVisitor = (data) =>{
     pool.query(`INSERT INTO Visitors(name, age, date, time, assistor, comments) VALUES ($1, $2, $3, $4, $5, $6)`,
     [data.name, data.age, data.date, data.time, data.assistor, data.comments],
@@ -32,6 +42,23 @@ const deleteVisitor = (id) => {
     });
 }
 
+const updateVisitor = (data) => {
+    pool.query('UPDATE Visitors SET name=($1), age=($2), date=($3), time=($4), assistor=($5), comments=($6) WHERE id=($7)',
+    [data.name, data.age, data.date, data.time, data.assistant, data.comments, data.id],
+    (error, results) =>{
+    console.log(error, results);
+  });
+}
+
+// updateVisitor({
+//         name: 'Kenny',
+//         age: 27,
+//         date: '2019-05-20',
+//         time: '12:00:00',
+//         assistor: 'Tebogo',
+//         comments: 'Application done',
+//         id: 1
+//     })
 
 const viewVisitor = (id) => {
     pool.query(`SELECT * FROM Visitors WHERE id = ${id}`, (error, respond) => {
@@ -44,8 +71,6 @@ const deleteAllVisitors = () => {
       console.log(error, respond);
     });
   };
-
-
 
 // addNewVisitor({
 //     name: 'Kenneth',
